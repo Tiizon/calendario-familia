@@ -1,0 +1,229 @@
+/* ==========================================================
+   Calendario Familia · estilos Premium (archivo único, se actualiza en cada versión)
+   Se carga DESPUÉS de style.css. Solo estilos: no toca datos,
+   turnos ni lógica. Para deshacer, basta con quitar el <link>.
+   ========================================================== */
+
+:root{
+  --b-bg:#fffdf8;          /* marfil cálido del botón opción B */
+  --b-bg-hover:#f3f8f4;
+  --b-ink:#177767;         /* verde petróleo de identidad */
+  --b-border:#177767;
+  --b-shadow:0 3px 10px #17604f1a;
+}
+
+/* ---------- 1. Botón «Añadir nota o evento» — opción B ---------- */
+#add-day.primary{
+  background:var(--b-bg);
+  color:var(--b-ink);
+  border:1.5px solid var(--b-border);
+  box-shadow:var(--b-shadow);
+  font-weight:650;
+}
+#add-day.primary:hover{background:var(--b-bg-hover)}
+#add-day .day-add-icon{color:var(--b-ink)}
+
+/* ---------- 2. Botón flotante — versión circular de la opción B ---------- */
+.fab{
+  background:var(--b-bg);
+  color:var(--b-ink);
+  border:1.5px solid var(--b-border);
+  border-radius:50%;
+  width:58px;height:58px;
+  font-weight:400;
+  box-shadow:0 6px 18px #17604f24;
+}
+.fab:hover{background:var(--b-bg-hover)}
+
+/* Modo oscuro: mismo concepto, colores adaptados */
+body.dark{--b-bg:#22362f;--b-bg-hover:#2b433c;--b-ink:#9fd8c8;--b-border:#7fc2b1}
+
+/* ---------- 3. Filtros unificados ---------- */
+/* Todas las pastillas iguales: mismo tamaño, borde y forma.
+   El botón exterior nunca lleva fondo; el color va en la etiqueta. */
+.filters .filter,
+.filters .filter[class*="person-"]{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0;
+  box-shadow:none;
+  padding:0;
+  min-height:44px;               /* zona táctil cómoda en iPhone */
+  justify-content:flex-start;
+}
+.filters .filter .filter-label{
+  width:auto;
+  border-radius:18px;
+  padding:6px 11px;
+  font-size:12px;
+  line-height:1.35;
+  box-shadow:inset 0 0 0 1px #ffffff80;
+}
+.filters .filter[aria-pressed=false] .filter-label{
+  background:var(--bg) !important;
+  color:var(--muted) !important;
+  box-shadow:inset 0 0 0 1px var(--line);
+}
+@media(max-width:600px){
+  .filters .filter .filter-label{font-size:11px;padding:6px 10px}
+}
+
+/* ---------- 4. Espacio para el botón flotante ---------- */
+/* Al final de la página siempre queda hueco para que el +
+   no tape el último contenido. */
+.app{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+@media(max-width:600px){
+  .fab{right:16px;bottom:calc(16px + env(safe-area-inset-bottom))}
+}
+
+/* ---------- 5. «De un vistazo» más limpio ---------- */
+.demo-note{display:none}            /* texto técnico movido a Ajustes */
+.settings-data-note{font-size:12px;line-height:1.55}
+
+/* ==========================================================
+   BETA 1.3 · Opción B «Familiar premium»
+   Nuevo evento y Editar turno
+   ========================================================== */
+
+:root{
+  --i-doc:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177767' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h4'/%3E%3C/svg%3E");
+  --i-cal:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177767' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z'/%3E%3C/svg%3E");
+  --i-clock:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177767' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+  --i-people:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177767' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8'/%3E%3C/svg%3E");
+  --i-text:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177767' stroke-width='1.7' stroke-linecap='round'%3E%3Cpath d='M4 6h16M4 11h16M4 16h10'/%3E%3C/svg%3E");
+  --i-bell:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23177767' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0'/%3E%3C/svg%3E");
+  --i-chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23243d37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  --leaves:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 120'%3E%3Cg fill='%23a9cdb6'%3E%3Cpath d='M118 8c-22 6-34 26-30 48 20-6 34-24 30-48Z' opacity='.55'/%3E%3Cpath d='M136 46c-20-2-36 10-40 30 20 2 36-10 40-30Z' opacity='.4'/%3E%3Cpath d='M84 2C70 14 68 32 78 46c12-12 14-30 6-44Z' opacity='.35'/%3E%3C/g%3E%3Cpath d='M74 112c10-30 26-60 48-86' fill='none' stroke='%2393bfa3' stroke-width='2' opacity='.5'/%3E%3C/svg%3E");
+}
+
+/* ---------- Comunes a los dos modales ---------- */
+#event-dialog .dialog-head h2,#shift-dialog .dialog-head h2{font-size:24px;font-weight:750;letter-spacing:-.4px;color:#1e3a33;margin:0}
+.dialog-sub{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+#event-dialog .close,#shift-dialog .close{
+  width:40px;height:40px;border-radius:50%;padding:0;font-size:24px;color:#335a54;
+  background:#ffffffe6;border:1px solid #fff;box-shadow:0 3px 9px #29483a18}
+
+/* Campos con icono delante */
+#event-dialog input:not([type=file]),#event-dialog select,#event-dialog textarea,
+#shift-dialog input,#shift-dialog select{
+  background-color:#fff;border:1px solid #e3e8e2;border-radius:14px;
+  box-shadow:0 1px 2px #20403508;
+  background-repeat:no-repeat;background-position:14px center;background-size:20px;
+  padding-left:46px;min-height:50px}
+#event-dialog textarea{background-position:14px 14px}
+#event-dialog select,#shift-dialog select{
+  -webkit-appearance:none;appearance:none;padding-right:42px;
+  background-image:var(--icon),var(--i-chev);
+  background-position:14px center,right 14px center;background-size:20px,18px}
+#event-dialog select{font-weight:600}
+#event-category{--icon:var(--i-doc)}
+#event-person{--icon:var(--i-people)}
+#event-reminder{--icon:var(--i-bell)}
+#event-name{background-image:var(--i-doc)}
+#event-date{background-image:var(--i-cal)}
+#event-time,#shift-start,#shift-end{background-image:var(--i-clock)}
+#event-description{background-image:var(--i-text)}
+#custom-reminder{padding-left:14px}
+
+/* Botón principal: verde petróleo relleno, como en la referencia */
+#event-form button.primary,#shift-form button.primary{
+  border-radius:16px;min-height:52px;font-size:16px;font-weight:650;
+  box-shadow:0 6px 16px #17604f2b}
+#event-form button.primary::before{
+  content:"";display:inline-block;width:19px;height:19px;margin-right:10px;vertical-align:-3px;
+  background:currentColor;
+  -webkit-mask:var(--i-cal) center/contain no-repeat;mask:var(--i-cal) center/contain no-repeat}
+
+/* ---------- Nuevo evento ---------- */
+body:not(.dark) #event-dialog{
+  background:var(--leaves) right -6px top -4px/150px auto no-repeat,
+             linear-gradient(180deg,#fff7ea 0,#fffbf4 180px,#fffdf9 100%)}
+#event-dialog .dialog-head{align-items:flex-start;margin-bottom:6px}
+#event-dialog .templates legend{font-size:14px;font-weight:700;color:#1e3a33}
+#event-templates{gap:9px}
+#event-templates button{
+  border:1px solid transparent;border-radius:16px;min-height:78px;padding:10px 3px 8px;
+  font-size:11px;font-weight:550;color:#2d4a43;gap:7px;
+  background:var(--tile-bg,#f3f5f1);box-shadow:0 1px 3px #2040350d}
+#event-templates svg{width:26px;height:26px;color:var(--tile-ink,var(--green));
+  stroke-width:1.9;fill:currentColor;fill-opacity:.16}
+#event-templates button.active{
+  border:1.5px solid var(--green);box-shadow:0 0 0 3px #17776714,0 2px 6px #17604f14;
+  background:var(--tile-bg)}
+[data-template=medico]{--tile-bg:#fde9e7;--tile-ink:#e0524a}
+[data-template=cita]{--tile-bg:#e7f0fb;--tile-ink:#3b82c4}
+[data-template=celebracion]{--tile-bg:#fdf1db;--tile-ink:#de952a}
+[data-template=comida]{--tile-bg:#e8f3e5;--tile-ink:#4f9a4a}
+[data-template=ocio]{--tile-bg:#efe8fa;--tile-ink:#8a5cd0}
+[data-template=nota]{--tile-bg:#e3f2ec;--tile-ink:#177767}
+[data-template=viaje]{--tile-bg:#e5f1fb;--tile-ink:#2f8fd8}
+[data-template=familiar]{--tile-bg:#fce7e6;--tile-ink:#d9534f}
+
+/* Aviso familiar cálido */
+.info-family{
+  display:flex;gap:12px;align-items:center;
+  background:#fdf3e4;border:1px solid #f5e6cf;border-radius:14px;
+  padding:12px 14px;color:#5b5045;font-size:12.5px;line-height:1.5}
+.info-family::before{
+  content:"";flex:0 0 34px;height:34px;border-radius:50%;
+  background:#fbe3bd url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c9822a'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3Ccircle cx='16' cy='8' r='3'/%3E%3Cpath d='M2 19a6 6 0 0 1 12 0Zm8 0a6 6 0 0 1 12 0Z'/%3E%3C/svg%3E") center/20px no-repeat}
+#event-form .notice{background:#f4f1ea;border-radius:12px;font-size:12px;color:var(--muted)}
+
+/* ---------- Editar turno ---------- */
+#shift-dialog{padding-top:0}
+#shift-dialog .shift-head{
+  position:relative;isolation:isolate;margin:0 -20px 16px;padding:22px 64px 34px 20px;
+  display:flex;align-items:center;gap:14px;min-height:120px;
+  border-radius:22px 22px 0 0}
+body:not(.dark) #shift-dialog .shift-head{
+  background:linear-gradient(90deg,#fff8ec 0,#fff8eccc 45%,#fff8ec00 75%),
+             url('illustrations/family-hills.svg') right bottom/auto 100% no-repeat,
+             linear-gradient(180deg,#fdf6ea,#fbf3e4)}
+#shift-dialog .close{position:absolute;right:16px;top:16px}
+.shift-avatar{flex:0 0 64px;height:64px;border-radius:50%;padding:3px;background:#fff;box-shadow:0 3px 10px #2a463c1f}
+.shift-avatar .avatar,.shift-avatar img,.shift-avatar svg{width:58px!important;height:58px!important;border-radius:50%;display:block;border:0}
+.shift-avatar:empty{display:none}
+.shift-head-text p{margin:3px 0 0}
+#shift-dialog #shift-date{font-size:14px;color:#4f625b}
+
+/* Icono del turno según el código elegido */
+#shift-code{--icon:var(--i-clock)}
+#shift-code[data-code=M]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d9a22e' stroke-width='1.9' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4' fill='%23E9B949'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E")}
+#shift-code[data-code=T]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ED785B' stroke-width='1.9' stroke-linecap='round'%3E%3Cpath d='M16 18a4 4 0 0 0-8 0' fill='%23ED785B'/%3E%3Cpath d='M12 2v6M4.9 10.9l1.4 1.4M2 18h2M20 18h2M19.1 10.9l-1.4 1.4M22 22H2'/%3E%3C/svg%3E")}
+#shift-code[data-code=N]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23293F87'%3E%3Cpath d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z'/%3E%3C/svg%3E")}
+#shift-code[data-code=L]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23879398' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 8h1a4 4 0 1 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4ZM6 2v2M10 2v2M14 2v2'/%3E%3C/svg%3E")}
+#shift-code[data-code=V]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2312AFA9' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 22h20M12 22V11M12 11C11 6 7 4 3 6M12 11c1-5 5-7 9-5M12 11C9 8 9 5 12 2c3 3 3 6 0 9'/%3E%3C/svg%3E")}
+#shift-code[data-code=HE]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238855CF' stroke-width='1.9' stroke-linecap='round'%3E%3Cpath d='M21 12a9 9 0 1 1-9-9'/%3E%3Cpath d='M12 7v5l3 2M19 2v6M16 5h6'/%3E%3C/svg%3E")}
+#shift-code[data-code=F]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23A9D944' stroke='%237da62f' stroke-width='1.4' stroke-linejoin='round'%3E%3Cpath d='m12 2 3 7h7l-5.5 4.5 2 7.5L12 17l-6.5 4 2-7.5L2 9h7Z'/%3E%3C/svg%3E")}
+#shift-dialog select{font-size:17px;font-weight:650;background-color:#f1f6f2}
+#shift-times input{font-size:18px;font-weight:600}
+
+/* Aviso verde suave con icono de información */
+.info-box{
+  display:flex;gap:12px;align-items:flex-start;
+  background:#ecf5f0;border-radius:14px;padding:12px 14px;
+  color:#4c5f58;font-size:12.5px;line-height:1.55}
+.info-box::before{
+  content:"i";flex:0 0 24px;height:24px;border-radius:50%;
+  background:#5aa98a;color:#fff;font:700 13px/24px Georgia,serif;text-align:center;margin-top:1px}
+
+/* ---------- Modo oscuro: solo mantener legibilidad ---------- */
+body.dark #event-dialog input:not([type=file]),body.dark #event-dialog select,body.dark #event-dialog textarea,
+body.dark #shift-dialog input,body.dark #shift-dialog select{background-color:var(--bg);border-color:var(--line)}
+body.dark #event-dialog .dialog-head h2,body.dark #shift-dialog .dialog-head h2{color:#edf5ef}
+body.dark .info-family{background:#33402f;border-color:#465a44;color:#dbe6d8}
+body.dark .info-box{background:#2b433c;color:#d6e6df}
+body.dark #event-templates button{background:#2b433c;color:#e2ece7}
+
+/* Ajustes tras la prueba en iPhone */
+#event-dialog input,#event-dialog select,#event-dialog textarea,
+#shift-dialog input,#shift-dialog select{box-sizing:border-box;max-width:100%}
+#event-dialog .two-col,#shift-dialog .two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+#shift-dialog .shift-head{justify-content:flex-start}
+.shift-head-text{flex:1;min-width:0;position:relative;z-index:1}
+body:not(.dark) #shift-dialog .shift-head{
+  background:linear-gradient(90deg,#fff8ec 0,#fff8ec 52%,#fff8ec00 82%),
+             url('illustrations/family-hills.svg') right bottom/auto 78% no-repeat,
+             linear-gradient(180deg,#fdf6ea,#fbf3e4)}
+#event-date,#event-time{font-size:16px;padding-right:8px}
+#event-dialog .two-col label,#shift-dialog .two-col label{align-self:end}
