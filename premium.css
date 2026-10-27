@@ -227,3 +227,124 @@ body:not(.dark) #shift-dialog .shift-head{
              linear-gradient(180deg,#fdf6ea,#fbf3e4)}
 #event-date,#event-time{font-size:16px;padding-right:8px}
 #event-dialog .two-col label,#shift-dialog .two-col label{align-self:end}
+
+/* ==========================================================
+   BETA 1.4 · Casillas del calendario mensual
+   Base limpia (opción A) + detalles de tarjeta (opción C).
+   Colores de turnos: los aprobados, sin cambios.
+   ========================================================== */
+
+/* Rejilla: casillas separadas, sin cuadrícula rígida */
+#calendar.calendar{gap:4px;padding:6px;background:#f7f5ef}
+.calendar-card .weekdays{background:#f7f5ef;border-bottom:0;padding:11px 6px 4px;gap:4px;font-weight:700}
+.weekdays span:nth-child(n+6){color:#8a8378}
+
+#calendar .day{
+  background:#fffefb;border:1px solid #ece8df;border-radius:10px;
+  box-shadow:0 1px 1px #2a40360a;
+  padding:7px 5px 6px;min-height:108px;gap:4px;
+  align-items:stretch;justify-content:flex-start;position:relative}
+#calendar .day:hover{background:#fffdf7;border-color:#e0dbcf}
+/* Fin de semana: un tono crema apenas perceptible */
+#calendar .day:nth-child(7n-1),#calendar .day:nth-child(7n){background:#fcfaf5}
+/* Días de otro mes: secundarios pero legibles */
+#calendar .day.other{background:#f5f3ee;border-color:#eeebe4;box-shadow:none}
+#calendar .day.other .day-num{color:#9aa39e}
+#calendar .day.other .shift-mini{opacity:.6}
+
+/* Número del día */
+#calendar .day-num{
+  align-self:flex-start;width:auto;min-width:24px;height:24px;padding:0 5px;margin:0 0 2px;
+  display:inline-grid;place-items:center;border-radius:12px;
+  font-size:14px;font-weight:650;color:#22392f;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+/* Hoy: número en círculo verde petróleo */
+#calendar .day.is-today .day-num{background:#177767;color:#fff;font-weight:750;box-shadow:0 2px 5px #17776733}
+/* Seleccionado: contorno fino verde petróleo, fondo apenas tintado */
+#calendar .day.selected{background:#f1f8f4;border-color:#177767;box-shadow:inset 0 0 0 .5px #177767,0 2px 8px #17776714;z-index:1}
+#calendar .day.selected.is-today{background:#eaf5ef}
+
+/* Pastillas de turno: todo el ancho, nombre a la izquierda y código a la derecha */
+#calendar .shift-mini,
+#calendar .shift-mini[class*="shift-kind-"]{
+  display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:3px;
+  width:100%;box-sizing:border-box;min-height:24px;padding:3px 7px;border-radius:7px;border:0;
+  background:var(--shift-bg,#eef0ee)!important;color:var(--shift-ink,#46524d)!important;
+  font-size:11px;line-height:1.1;letter-spacing:0;box-shadow:inset 0 -1px 0 #0000000f}
+#calendar .shift-mini>span{border:0!important;padding:0!important;font-weight:550;overflow:hidden;text-overflow:clip;white-space:nowrap;min-width:0}
+#calendar .shift-mini b,
+#calendar .shift-mini[class*="shift-kind-"] b{
+  background:transparent;box-shadow:none;color:inherit;min-width:0;height:auto;
+  font-size:11px;font-weight:800;flex-shrink:0;display:block}
+#calendar .shift-kind-mixed{--shift-bg:linear-gradient(90deg,#ED785B 50%,#12AFA9 50%);--shift-ink:#1f2a28}
+/* Sábado de María sin asignar */
+#calendar .shift-mini.pending{
+  background:#fbeef2!important;color:#a04b68!important;border:1px dashed #d79bb0;box-shadow:none;padding:2px 6px}
+#calendar .shift-mini.missing{background:#f1f2ef!important;color:#7d8782!important}
+
+/* Eventos: iconos compactos debajo de los turnos */
+#calendar .day-events{display:flex;align-items:center;gap:3px;margin-top:auto;padding-top:2px;min-height:18px}
+#calendar .ev-icon{display:grid;place-items:center;width:18px;height:18px;border-radius:6px;
+  background:var(--tile-bg,#e3f2ec);color:var(--tile-ink,#177767);flex-shrink:0}
+#calendar .ev-icon svg{width:12px;height:12px;stroke-width:2.1}
+#calendar .ev-more{font-size:10px;font-weight:700;color:#4f625b;line-height:1}
+.cat-medico{--tile-bg:#fde9e7;--tile-ink:#e0524a}
+.cat-cita{--tile-bg:#e7f0fb;--tile-ink:#3b82c4}
+.cat-celebracion{--tile-bg:#fdf1db;--tile-ink:#c98420}
+.cat-comida{--tile-bg:#e8f3e5;--tile-ink:#4f9a4a}
+.cat-ocio{--tile-bg:#efe8fa;--tile-ink:#8a5cd0}
+.cat-nota{--tile-bg:#e3f2ec;--tile-ink:#177767}
+.cat-viaje{--tile-bg:#e5f1fb;--tile-ink:#2f8fd8}
+.cat-familiar{--tile-bg:#fce7e6;--tile-ink:#d9534f}
+
+/* Ordenador: más aire */
+@media(min-width:760px){
+  #calendar.calendar{gap:6px;padding:8px}
+  #calendar .day{min-height:128px;padding:9px 8px 8px;gap:5px;border-radius:12px}
+  #calendar .day-num{font-size:15px}
+  #calendar .shift-mini,#calendar .shift-mini[class*="shift-kind-"]{min-height:27px;font-size:13px;padding:4px 9px}
+  #calendar .shift-mini b{font-size:13px}
+  #calendar .ev-icon{width:22px;height:22px}
+  #calendar .ev-icon svg{width:14px;height:14px}
+}
+
+/* iPhone (375–390 px): compacto sin texto diminuto */
+@media(max-width:600px){
+  #calendar.calendar{gap:3px;padding:4px}
+  .calendar-card .weekdays{gap:3px;padding:10px 4px 3px}
+  #calendar .day{min-height:96px;padding:5px 3px 4px;gap:3px;border-radius:8px}
+  #calendar .day-num{font-size:13px;height:22px;min-width:22px;padding:0 4px;margin-left:1px}
+  #calendar .shift-mini,#calendar .shift-mini[class*="shift-kind-"]{min-height:22px;padding:2px 4px;border-radius:6px;font-size:10px;gap:2px}
+  #calendar .shift-mini b{font-size:10px}
+  #calendar .shift-mini.pending{padding:1px 3px}
+  #calendar .ev-icon{width:16px;height:16px;border-radius:5px}
+  #calendar .ev-icon svg{width:11px;height:11px}
+}
+
+/* Móvil (hasta 430 px): nombre arriba y código debajo en la misma pastilla,
+   para no cortar nombres ni usar letra diminuta */
+@media(max-width:430px){
+  #calendar .day{min-height:116px;padding:4px 3px}
+  #calendar .shift-mini,#calendar .shift-mini[class*="shift-kind-"]{
+    flex-direction:column;justify-content:center;align-items:center;gap:1px;
+    min-height:32px;padding:3px 2px;text-align:center}
+  #calendar .shift-mini>span{font-size:10px;font-weight:550;max-width:100%}
+  #calendar .shift-mini b{font-size:11px;line-height:1}
+  #calendar .day-events{gap:2px}
+  #calendar .ev-icon{width:15px;height:15px}
+  #calendar .ev-icon svg{width:10px;height:10px}
+  #calendar .ev-more{font-size:9.5px}
+}
+@media(max-width:359px){
+  #calendar.calendar{gap:2px;padding:3px}
+  #calendar .day{min-height:116px;padding:4px 2px;border-radius:7px}
+  #calendar .shift-mini>span{font-size:9.5px}
+  #calendar .day-num{align-self:center;margin-left:0}
+}
+
+/* Modo oscuro */
+body.dark #calendar.calendar,body.dark .calendar-card .weekdays{background:#1d2d27}
+body.dark #calendar .day{background:#22362f;border-color:#34493f;box-shadow:none}
+body.dark #calendar .day:nth-child(7n-1),body.dark #calendar .day:nth-child(7n){background:#21332c}
+body.dark #calendar .day.other{background:#1f302a}
+body.dark #calendar .day-num{color:#e5efea}
+body.dark #calendar .day.selected{background:#284139;border-color:#7fc2b1}
